@@ -16,25 +16,13 @@ int targetVar[] = {1, 1, 1, 1, 1, 1, 1};
 
 
 
-//int target1Var = 1;
-//int target2Var = 1;
-//int target3Var = 1;
-//int target4Var = 1;
-//int target5Var = 1;
-//int target6Var = 1;
-//int target7Var = 1;
+
 
 int resetVar = 1;
 
 int reed_pin[] = {3, 4, 5, 6, 7, 8, 9};
 
-//int reed_pin3 = 3; //target #1 (pos)
-//int reed_pin4 = 4; //target #2 (neg)
-//int reed_pin5 = 5; //target #3 (pos)
-//int reed_pin6 = 6; //target #4 (neg)
-//int reed_pin7 = 7; //target #5 (pos)
-//int reed_pin8 = 8; //target #6 (neg)
-// int reed_pin9 = 9; //target #7 (pos)
+
 
 void setup() {
   pinMode(toggle, INPUT_PULLUP);
@@ -46,7 +34,7 @@ void setup() {
 
 void loop() {
   // rest loop value when toggle is off for game reset
-  resetVar = 1;
+  resetVar = 1
 
   //******************************
   //********target #1 (pos)*******
