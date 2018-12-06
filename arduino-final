@@ -1,0 +1,217 @@
+//********************Cyber Shoot Out!********************
+//use 44 LED strip, 6 LEDs per target
+
+
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+#include <avr/power.h>
+#endif
+#define LEDPIN 11
+#define NUM_LEDS 46
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LEDPIN, NEO_GRB + NEO_KHZ800);
+
+int toggle = 12;
+int score = 0;
+int targetVar[] = {1, 1, 1, 1, 1, 1, 1};
+
+
+
+//int target1Var = 1;
+//int target2Var = 1;
+//int target3Var = 1;
+//int target4Var = 1;
+//int target5Var = 1;
+//int target6Var = 1;
+//int target7Var = 1;
+
+int resetVar = 1;
+
+int reed_pin[] = {3, 4, 5, 6, 7, 8, 9};
+
+//int reed_pin3 = 3; //target #1 (pos)
+//int reed_pin4 = 4; //target #2 (neg)
+//int reed_pin5 = 5; //target #3 (pos)
+//int reed_pin6 = 6; //target #4 (neg)
+//int reed_pin7 = 7; //target #5 (pos)
+//int reed_pin8 = 8; //target #6 (neg)
+// int reed_pin9 = 9; //target #7 (pos)
+
+void setup() {
+  pinMode(toggle, INPUT_PULLUP);
+  strip.begin();
+  strip.show();
+  Serial.begin(9600);
+
+}
+
+void loop() {
+  // rest loop value when toggle is off for game reset
+  resetVar = 1;
+
+  //******************************
+  //********target #1 (pos)*******
+  //******************************
+  if (digitalRead(reed_pin[0]) == HIGH) {
+    if (targetVar[0] == 1) {
+      //Serial.println("target 1 hit!");
+      for (int y = 0; y < 6; y++) {
+        //sets to green
+        strip.setPixelColor(y, strip.Color(0, 255, 0));
+      }
+      strip.show();
+      score += 1;
+      targetVar[0] = 0;
+    }
+  }
+
+  //******************************
+  //********target #2 (neg)*******
+  //******************************
+  if (digitalRead(reed_pin[1]) == HIGH) {
+    if (targetVar[1] == 1) {
+      //Serial.println("target 2 hit!");
+      for (int y = 6; y < 12; y++) {
+        //sets to red
+        strip.setPixelColor(y, strip.Color(255, 0, 0));
+      }
+      strip.show();
+      score -= 2;
+      targetVar[1] = 0;
+    }
+  }
+
+  //******************************
+  //********target #3 (pos)*******
+  //******************************
+  if (digitalRead(reed_pin[2]) == HIGH) {
+    if (targetVar[2] == 1) {
+      //Serial.println("target 3 hit!");
+      for (int y = 12; y < 19; y++) {
+        //sets to green
+        strip.setPixelColor(y, strip.Color(0, 255, 0));
+      }
+      strip.show();
+      score += 2;
+      targetVar[2] = 0;
+    }
+  }
+
+  //******************************
+  //********target #4 (neg)*******
+  //******************************
+  if (digitalRead(reed_pin[3]) == HIGH) {
+    if (targetVar[3] == 1) {
+      //Serial.println("target 4 hit!");
+      for (int y = 19; y < 25; y++) {
+        //sets to red
+        strip.setPixelColor(y, strip.Color(255, 0, 0));
+      }
+      strip.show();
+      score -= 3;
+      targetVar[3] = 0;
+    }
+    }
+
+    //******************************
+    //********target #5 (pos)*******
+    //******************************
+    if (digitalRead(reed_pin[4]) == HIGH) {
+    if (targetVar[4] == 1) {
+      //Serial.println("target 5 hit!");
+      for (int y = 25; y < 31; y++) {
+        //sets to green
+        strip.setPixelColor(y, strip.Color(0, 255, 0));
+      }
+      strip.show();
+      score += 3;
+      targetVar[4] = 0;
+    }
+    }
+
+    //******************************
+    //********target #6 (neg)*******
+    //******************************
+    if (digitalRead(reed_pin[5]) == HIGH) {
+    if (targetVar[5] == 1) {
+      //Serial.println("target 6 hit!");
+      for (int y = 31; y < 37; y++) {
+        //sets to red
+        strip.setPixelColor(y, strip.Color(255, 0, 0));
+      }
+      strip.show();
+      score -= 2;
+      targetVar[5] = 0;
+    }
+    }
+
+    //******************************
+    //********target #7 (pos)*******
+    //******************************
+    if (digitalRead(reed_pin[6]) == HIGH) {
+    if (targetVar[6] == 1) {
+      //Serial.println("target 7 hit!");
+      for (int y = 37; y < 44; y++) {
+        //sets to green
+        strip.setPixelColor(y, strip.Color(0, 255, 0));
+      }
+      strip.show();
+      score += 1;
+      targetVar[6] = 0;
+    }
+    }
+ 
+  while (digitalRead(toggle) == LOW) {
+
+    //visual que that game is in reset mode
+    colorChase(random(255), random(255), random(255));
+
+    if (resetVar == 1) {
+      //keep button open while reseting
+      //sends score value to pi
+      Serial.print(score);
+
+      //resets tigger val to reset game
+      for (int x = 0; x < 7; x++) {
+        targetVar[x] = 1;
+      }
+
+      //reset score to zero for next player
+      score = 0;
+      resetVar = 0;
+    }
+  }
+}
+
+//****************colorChase***********
+
+void colorChase (int color1, int color2, int color3) {
+
+  for (int t = 0; t < 1; t++) {
+    int y = 60;
+    int z = 61;
+    for (int x = 0; x < NUM_LEDS; x++) {
+      if (x == 1) {
+        y = 0;
+      }
+      if (x == 2) {
+        z = 0;
+      }
+      strip.setPixelColor(x, strip.Color(color1, color2, color3));
+      strip.setPixelColor(y, strip.Color(color1 / 2, color2 / 2, color3 / 2));
+      strip.setPixelColor(z, strip.Color(color1 / 3, color2 / 3, color3 / 3));
+      strip.show();
+      delay(30);
+      y++;
+      z++;
+      off();
+    }
+  }
+}
+
+//***************lightsOff*************
+void off() {
+  for (int x = 0; x < NUM_LEDS; x++) {
+    strip.setPixelColor(x, strip.Color(0, 0, 0));
+  }
+  strip.show();
+}
