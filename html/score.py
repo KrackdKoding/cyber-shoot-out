@@ -20,7 +20,7 @@ def Main():
         print "{} Does not exist, exiting".format(args.interface)
         sys.exit(1)
 
-    ser = serial.Serial(args.interface, 9600, timeout=1) # TODO verify interface is valid
+    ser = serial.Serial(args.interface, 9600, timeout=1)
     # ser.open()
 
     try:
