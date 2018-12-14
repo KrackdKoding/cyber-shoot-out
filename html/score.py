@@ -1,4 +1,5 @@
 import argparse
+import os.path
 import serial
 import sqlite3
 import string
@@ -14,6 +15,10 @@ def Main():
     parser.add_argument("-i", "--interface", required=True, help="arduino interface name, in format /dev/ttyUSB*")
 
     args = parser.parse_args()
+    
+    if not os.path.exists(args.interface):
+        print "{} Does not exist, exiting".format(args.interface)
+        sys.exit(1)
 
     ser = serial.Serial(args.interface, 9600, timeout=1) # TODO verify interface is valid
     # ser.open()
@@ -22,7 +27,7 @@ def Main():
         conn = sqlite3.connect(sqlDB)
     except Exception as e:
         print e
-        sys.exit(1)
+        sys.exit(2)
 
     # Forever loop
     while True:
